@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<head>
+	<title>
+		Twitter Analysis Of Road Congestion Severity Estimation
+	</title>
+<script>
+
+function remove(){
+	document.getElementById("road_lbl").style.display = "None";
+	document.getElementById("remove_btn").style.display = "None";
+	document.getElementById("road_lbl_sev").style.display = "None";
+}
+
+function add(){
+	var e = document.getElementById("road_dd");
+	var strUser = e.options[e.selectedIndex].text;
+	document.getElementById("road_lbl").innerHTML = strUser;
+	document.getElementById("road_lbl_sev").innerHTML = strUser;
+	document.getElementById("road_lbl").style.display = "block";
+	document.getElementById("road_lbl_sev").style.display = "block";
+	document.getElementById("remove_btn").style.display = "block";
+	myMap_select();
+}
+
+</script>
+
+<script>
+function startTime() {
+    var today = new Date();
+    var h = today.getHours();
+    var m = today.getMinutes();
+    m = checkTime(m);
+    document.getElementById('time').innerHTML = "<b>Current Time:</b> " + h + ":" + m;
+	//code for tym variable which sets the range
+    document.getElementById('time_range').innerHTML = "<b>Estimation For:</b> " + tym;
+    var t = setTimeout(startTime, 500);
+}
+function checkTime(i) {
+    if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+    return i;
+}
+</script>
+
+</head>
+<body onload="startTime()">
+	<table width=100% cellpadding=0 cellspacing=1>
+		<tr style="background: #2C3E50;  /* fallback for old browsers */background: -webkit-linear-gradient(to right, #FD746C, #2C3E50);  /* Chrome 10-25, Safari 5.1-6 */background: linear-gradient(to right, #FD746C, #2C3E50); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */">
+			<td colspan=2>
+				<font size=5 color="white"><b>&nbsp;&nbsp;Twitter Analysis Of Road Congestion Severity Estimation</b></font>
+			</td>
+		</tr>
+		<tr align="left">
+			<td width="600px">
+				<div id="map" style="width:600px;height:600px"></div>
+
+					<script>
+
+					function myMap() {
+	
+					var mapOptions = {
+	    				center: new google.maps.LatLng(16.585535, 99.437178),
+	    				zoom: 10,
+	    				mapTypeId: google.maps.MapTypeId.HYBRID
+					}
+
+					var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+					}
+
+					</script>
+
+					<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAfr-aWPU0VMmEotYDMK3czIjq8s5FViYc&callback=myMap"></script>
+
+			</td>
+			<td  style="vertical-align: text-top;">
+				<table width=100%>
+					<tr>
+						<td>
+						<b>Road name</b>
+						</td>
+					</tr>
+					<tr>
+						<td>
+						<select id="road_dd" style="width:400px;border-radius:5px">
+						<option value="Pahonyothin Road" selected="selected">Pahonyothin Road</option>
+						<option value="G.T Road">G.T Road</option>
+						</select>
+						<input type="button" value="Add" id="add_btn" onClick="add()" style="border-radius:5px"/>
+						</td>
+					</tr>
+					<tr>
+						<td>
+						<br>
+						<b>Road to be estimated:</b>
+						</td>
+					</tr>
+					<tr>
+						<td>
+						<table width=100% border=1 cellspacing=0 style="border-radius:5px">
+							<tr style="background: #76b852;  /* fallback for old browsers */background: -webkit-linear-gradient(to right, #8DC26F, #76b852);  /* Chrome 10-25, Safari 5.1-6 */background: linear-gradient(to right, #8DC26F, #76b852); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */">
+							<b>
+								<td>
+								Road name
+								</td>
+								<td>
+								Remove
+								</td>
+							</b>
+							</tr>
+						<tr>
+							<td>
+							<div id="road_lbl" style="display:none"></div>
+							</td>
+							<td>
+							<input type="button" id="remove_btn" value="X" onclick="remove()" style="display:none ;border: 1px solid; border-radius:10px; color:red" />
+							</td>
+						</tr>
+						</table>
+						</td>
+					</tr>	
+					<tr>
+						<td>
+						<br>
+							<div id="time"></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div id="time_range"></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+						<table width=100% border=1 cellspacing=0 style="border-radius:5px">
+							<tr style="background: #76b852;  /* fallback for old browsers */background: -webkit-linear-gradient(to right, #8DC26F, #76b852);  /* Chrome 10-25, Safari 5.1-6 */background: linear-gradient(to right, #8DC26F, #76b852); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */">
+								<b>
+								<td>
+									Road name
+								</td>
+								<td>
+									Severity
+								</td>
+								</b>
+							</tr>
+							<tr>
+								<td>
+									<div id="road_lbl_sev" style="display:none"></div>
+								</td>
+								<td>
+									<marquee><div id="severity"></div></marquee>
+								</td>
+							</tr>
+						</table>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>

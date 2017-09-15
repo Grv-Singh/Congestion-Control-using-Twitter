@@ -19,7 +19,7 @@ function add(){
 	document.getElementById("road_lbl").style.display = "block";
 	document.getElementById("road_lbl_sev").style.display = "block";
 	document.getElementById("remove_btn").style.display = "block";
-	myMap_select();
+	myMap();
 }
 
 </script>
@@ -59,11 +59,22 @@ function checkTime(i) {
 	
 					var mapOptions = {
 	    				center: new google.maps.LatLng(16.585535, 99.437178),
-	    				zoom: 10,
+	    				zoom: 12,
 	    				mapTypeId: google.maps.MapTypeId.HYBRID
 					}
-
+					
 					var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+					
+					change_map(map);
+					}
+					
+					function change_map(myMap){
+						var e = document.getElementById("road_dd");
+						var strUser = e.options[e.selectedIndex].text;
+						if(strUser=="Highway 401 Ontario"){
+							myMap.setCenter(new google.maps.LatLng( 44.7380341, -81.1405233 ) );
+							marker.setMap(map);
+						}
 					}
 
 					</script>
@@ -82,7 +93,7 @@ function checkTime(i) {
 						<td>
 						<select id="road_dd" style="width:400px;border-radius:5px">
 						<option value="Pahonyothin Road" selected="selected">Pahonyothin Road</option>
-						<option value="G.T Road">G.T Road</option>
+						<option value="Highway 401 Ontario">Highway 401 Ontario</option>
 						</select>
 						<input type="button" value="Add" id="add_btn" onClick="add()" style="border-radius:5px"/>
 						</td>
@@ -146,7 +157,7 @@ function checkTime(i) {
 									<div id="road_lbl_sev" style="display:none"></div>
 								</td>
 								<td>
-									<marquee><div id="severity"></div></marquee>
+									<marquee><b><div id="severity"></div></b></marquee>
 								</td>
 							</tr>
 						</table>

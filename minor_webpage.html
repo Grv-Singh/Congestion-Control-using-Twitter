@@ -1,8 +1,16 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
+	<meta charset="UTF-8" />
 	<title>
 		Twitter Analysis Of Road Congestion Severity Estimation
 	</title>
+	<style>
+      body { margin: 0; padding: 0; font: 12px/1.2 Meiryo, Tahoma, sans-serif; }
+      #header { background: #2086f3; font-size: 30px; color: #ffffff; padding: 12px; }
+      #map { margin: 4px; float: right; z-index: 800; }
+      #content { margin: 4px; width: 240px; float: left; overflow-y: auto; }
+    </style>
 <script>
 
 function remove(){
@@ -22,23 +30,23 @@ function add(){
 	myMap();
 }
 
-</script>
-
-<script>
 function startTime() {
     var today = new Date();
     var h = today.getHours();
     var m = today.getMinutes();
-    m = checkTime(m);
-    document.getElementById('time').innerHTML = "<b>Current Time:</b> " + h + ":" + m;
-	//code for tym variable which sets the range
-    document.getElementById('time_range').innerHTML = "<b>Estimation For:</b> " + tym;
-    var t = setTimeout(startTime, 500);
+	var s = today.getSeconds();
+    document.getElementById('time').innerHTML = "<h2>Current Time </h2><h3> " + h + ":" + m + ":" + s +"</h3>";
+	var tym;
+	if(m<=29){
+		tym = ""+ h + " : 30 to " + (h+1) + " : 00";
+	}
+	if(m>29){
+		tym = "" + (h+1) + " : 00 to " + (h+1) + " : 30";
+	}
+	document.getElementById('time_range').innerHTML = "<h2>Estimation For </h2><h3>" + tym + "</h3>";
 }
-function checkTime(i) {
-    if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
-    return i;
-}
+setInterval(startTime, 1000);
+
 </script>
 
 </head>
@@ -52,41 +60,80 @@ function checkTime(i) {
 		<tr align="left">
 			<td width="600px">
 				<div id="map" style="width:600px;height:600px"></div>
-
+				
+				<script src="http://api.longdo.com/map/?key=10dc711504c21ed52209d679ec3d50da"></script>
+				
 					<script>
-
-					function myMap() {
-	
-					var mapOptions = {
-	    				center: new google.maps.LatLng(16.585535, 99.437178),
-	    				zoom: 12,
-	    				mapTypeId: google.maps.MapTypeId.HYBRID
-					}
-					
-					var map = new google.maps.Map(document.getElementById("map"), mapOptions);
-					
-					change_map(map);
-					}
-					
-					function change_map(myMap){
+      var map;
+      function myMap() {
+        
+        // สร้างแผนที่
+        map = new longdo.Map({
+          layer : [
+            longdo.Layers.GRAY,
+			longdo.Layers.NORMAL_EN,
+			longdo.Layers.TRAFFIC,
+          ],
+		  language : 'en',
+          placeholder : document.getElementById('map'),
+		  lastview : false,
+        });
+        
+		map.bound({minLon: 99, minLat: 16, maxLon: 100, maxLat: 17});
+		
+        // แสดงเหตุการณ์และกล้อง
+        setTimeout(map.Overlays.load, 1000, longdo.Overlays.events);
+        setTimeout(map.Overlays.load, 2000, longdo.Overlays.cameras);
+        
+        // เพิ่มเมนูแนะนำเส้นทาง และกำหนดให้หาเส้นทางอัตโนมัติ
+        map.Route.enableContextMenu();
+        map.Route.auto(true);
+		map.Route.language('en');
+		map.zoom(12);
+		map.language('en');
+		
+		change_map(map);
+      }
+	  
+	  function change_map(myMap){
 						var e = document.getElementById("road_dd");
 						var strUser = e.options[e.selectedIndex].text;
 						if(strUser=="Highway 401 Ontario"){
-							myMap.setCenter(new google.maps.LatLng( 44.7380341, -81.1405233 ) );
-							marker.setMap(map);
+							map = new longdo.Map({
+          layer : [
+            longdo.Layers.GRAY,
+			longdo.Layers.NORMAL_EN,
+			longdo.Layers.TRAFFIC,
+          ],
+		  language : 'en',
+          placeholder : document.getElementById('map'),
+		  lastview : false,
+        });
+        
+		map.center({minLon: -78, minLat: 43, maxLon: -77, maxLat: 44});
+			//43.8812913,-78.775111
+        // แสดงเหตุการณ์และกล้อง
+        setTimeout(map.Overlays.load, 1000, longdo.Overlays.events);
+        setTimeout(map.Overlays.load, 2000, longdo.Overlays.cameras);
+        
+        // เพิ่มเมนูแนะนำเส้นทาง และกำหนดให้หาเส้นทางอัตโนมัติ
+        map.Route.enableContextMenu();
+        map.Route.auto(true);
+		map.Route.language('en');
+		map.zoom(12);
+		map.language('en');
 						}
 					}
+	  </script>
 
-					</script>
-
-					<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAfr-aWPU0VMmEotYDMK3czIjq8s5FViYc&callback=myMap"></script>
+		
 
 			</td>
 			<td  style="vertical-align: text-top;">
 				<table width=100%>
 					<tr>
 						<td>
-						<b>Road name</b>
+						<h2>Road name</h2>
 						</td>
 					</tr>
 					<tr>
@@ -101,7 +148,7 @@ function checkTime(i) {
 					<tr>
 						<td>
 						<br>
-						<b>Road to be estimated:</b>
+						<h2>Road to be estimated</h2>
 						</td>
 					</tr>
 					<tr>
@@ -157,10 +204,11 @@ function checkTime(i) {
 									<div id="road_lbl_sev" style="display:none"></div>
 								</td>
 								<td>
-									<marquee><b><div id="severity"></div></b></marquee>
+									<b><div id="severity"></div></b>
 								</td>
 							</tr>
 						</table>
+						<!--<img style="-webkit-user-select: none;background-position: 0px 0px, 10px 10px;background-size: 20px 20px;background-image:linear-gradient(45deg, #eee 25%, transparent 25%, transparent 75%, #eee 75%, #eee 100%),linear-gradient(45deg, #eee 25%, white 25%, white 75%, #eee 75%, #eee 100%);" src="https://www.mapquestapi.com/traffic/v2/flow?key=uUHah7yVPx0GTemjiSWnvtAYzAKk953g&amp;mapLat=16.531228&amp;mapLng=99.474592&amp;mapHeight=400&amp;mapWidth=400&amp;mapScale=433343">-->
 						</td>
 					</tr>
 				</table>

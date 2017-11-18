@@ -1,0 +1,317 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<script  type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script  type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script  type="text/javascript" src="https://files.codepedia.info/files/uploads/iScripts/html2canvas.js"></script>
+	<meta charset="UTF-8" />
+	<meta http-equiv="refresh" content="2100;url=file:///web application.html" />
+	<title>
+		Twitter Analysis Of Road Congestion Severity Estimation
+	</title>
+	<style>
+      body { margin: 0; padding: 0; font: 12px/1.2 Meiryo, Tahoma, sans-serif; }
+      #header { background: #2086f3; font-size: 30px; color: #ffffff; padding: 12px; }
+      #map { margin: 5px; float: left; z-index: 800; }
+	  #google_map { margin: 5px; float: left; z-index: 800; }
+      #content { margin: 4px; width: 240px; float: left; overflow-y: auto; }
+    </style>
+<script>
+	function add(){
+			var e = document.getElementById("road_dd");
+			var strUser = e.options[e.selectedIndex].text;
+			document.getElementById("road_lbl").innerHTML = strUser;
+			document.getElementById("road_lbl_sev").innerHTML = strUser;
+			document.getElementById("remove_btn").style.display = "block";
+	}
+
+	function remove(){
+		document.getElementById("road_lbl").style.display = "None";
+		document.getElementById("remove_btn").style.display = "None";
+		document.getElementById("road_lbl_sev").style.display = "None";
+	}
+
+	function startTime() {
+		var today = new Date();
+		var h = today.getHours();
+		var m = today.getMinutes();
+		var s = today.getSeconds();
+		document.getElementById('time').innerHTML = "<h2>Current Time </h2><h3> " + h + ":" + m + ":" + s +"</h3>";
+		var tym;
+		if(m<=29){
+			tym = ""+ h + " : 30 to " + (h+1) + " : 00";
+		}
+		if(m>29){
+			tym = "" + (h+1) + " : 00 to " + (h+1) + " : 30";
+		}
+		document.getElementById('time_range').innerHTML = "<h2>Estimation For </h2><h3>" + tym + "</h3>";
+	}
+	setInterval(startTime, 1000);
+	
+	
+function myMap(){
+	 var map = new longdo.Map({
+          layer : [
+            longdo.Layers.NORMAL_EN,
+			longdo.Layers.TRAFFIC,
+
+          ],
+		  language : 'en',
+          placeholder : document.getElementById('map'),
+		  lastview : false,
+        });
+
+		map.location({ lon:100.992541, lat:15.870032 }, true);
+        setTimeout(map.Overlays.load, 1000, longdo.Overlays.events);
+        setTimeout(map.Overlays.load, 2000, longdo.Overlays.cameras);
+
+        map.Route.enableContextMenu();
+        map.Route.auto(true);
+		map.Route.language('en');
+		map.zoom(9);
+		map.language('en');
+		runb(map);l
+		}
+	
+	function runb(map){
+		merg(map.location(),0);	
+	}
+	
+	function run(map){
+		merg(map.getCenter(),0);
+	}
+	
+function initMap(){	
+		
+	var map_color = new google.maps.Map(document.getElementById("map_color"), {
+    zoom: 9,
+    center: new google.maps.LatLng(15.870032 , 100.992541),
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    disableDoubleClickZoom: true,
+    draggable: false,
+    scrollwheel: false,
+    panControl: false,
+    disableDefaultUI: true,
+    styles: [{
+      "stylers": [{
+        "visibility": "off"
+      }]
+    }]
+  });
+  
+  var trafficLayer = new google.maps.TrafficLayer();
+  trafficLayer.setMap(map_color);
+  
+  var goog_map = new google.maps.Map(document.getElementById('google_map'), {
+          zoom: 9,
+          center: {lat: 13.967392, lng: 100.619023}
+        });
+        var geocoder = new google.maps.Geocoder();
+
+        document.getElementById('add_btn').addEventListener('click', function() {
+			geocodeAddress(geocoder, goog_map);
+			geocodeAddress(geocoder, map_color);
+        });
+		var trafficLayer = new google.maps.TrafficLayer();
+        trafficLayer.setMap(goog_map);
+		
+		run(goog_map);
+	}
+
+      function geocodeAddress(geocoder, resultsMap) {
+        var address = document.getElementById('road_dd').value;
+        geocoder.geocode({'address': address}, function(results, status) {
+          if (status === 'OK') {
+            resultsMap.setCenter(results[0].geometry.location);
+            var marker = new google.maps.Marker({
+              map: resultsMap,
+              position: results[0].geometry.location
+            });
+          } else {
+            alert('Geocode was not successful for the following reason: ' + status);
+          }
+        });
+      }
+
+	  $(document).ready(function(){
+	  
+var element = $("#map-color"); // global variable
+var getCanvas; // global variable
+
+    $("#preview").on('click', function () {
+         html2canvas(element, {
+         onrendered: function (canvas) {
+                $("#previewImage").append(canvas);
+                getCanvas = canvas;
+             }
+         });
+    });
+
+	$("#down").on('click', function () {
+		var imgageData = getCanvas.toDataURL("image/png");
+		// Now browser starts downloading it instead of just showing it
+		var newData = imgageData.replace(/^data:image\/png/, "data:application/octet-stream");
+		$("#down").attr("download", "img.png").attr("href", newData);
+	});
+	
+});
+</script>
+</head>
+<body onload="startTime(),myMap()" style="overflow: hidden;">
+
+	<table width=100% cellpadding=0 cellspacing=1>
+		<tr style="background: #2C3E50;  /* fallback for old browsers */background: -webkit-linear-gradient(to right, #FD746C, #2C3E50);  /* Chrome 10-25, Safari 5.1-6 */background: linear-gradient(to right, #FD746C, #2C3E50); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */">
+			<td colspan=3 align="center">
+				<font size=6 color="white"><b>&nbsp;&nbsp;Twitter Analysis Of Road Congestion Severity Estimation</b></font>
+			</td>
+		</tr>
+		<tr align="left">
+			<td width="30%">
+
+			<h2>
+			<img id="blink" src="live.gif" width=20px height=20px />Live Traffic</h2>
+
+				<div id="map" style="width:525px;height:525px"></div>
+
+			</td>
+			<td  style="vertical-align: text-top;"  width="30%">
+				<table width=100%>
+					<tr>
+						<td>
+						<h2>Road name</h2>
+						</td>
+					</tr>
+					<tr>
+						<td>
+						<select id="road_dd" style="border-radius:5px">
+						
+						<option value="Sanam Chai Road" selected="selected">Sanam Chai Road</option>
+						<option value="Sathon Road" selected="selected">Sathon Road</option>
+						<option value="Khaoson Road" selected="selected">Khaoson Road</option>
+						</select>
+						
+						<input type="button" value="Add" id="add_btn" onclick="add()" style="border-radius:5px"/>
+						</td>
+					</tr>
+					<tr>
+						<td>
+						<br>
+						<h2>Road to be estimated</h2>
+						</td>
+					</tr>
+					<tr>
+						<td>
+						<table width=100% border=1 cellspacing=0 style="border-radius:5px">
+							<tr style="background: #76b852;  /* fallback for old browsers */background: -webkit-linear-gradient(to right, #8DC26F, #76b852);  /* Chrome 10-25, Safari 5.1-6 */background: linear-gradient(to right, #8DC26F, #76b852); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */">
+							<b>
+								<td>
+								Road name
+								</td>
+								<td>
+								Remove
+								</td>
+							</b>
+							</tr>
+						<tr>
+							<td>
+							<div id="road_lbl"></div>
+							</td>
+							<td>
+							<input type="button" id="remove_btn" value="X" onclick="remove()" style="display:none ;border: 1px solid; border-radius:10px; color:red" />
+							</td>
+						</tr>
+						</table>
+						</td>
+					</tr>
+					<tr>
+						<td>
+						<br>
+							<div id="time"></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div id="time_range"></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+						<table width=100% border=1 cellspacing=0 style="border-radius:5px">
+							<tr style="background: #76b852;  /* fallback for old browsers */background: -webkit-linear-gradient(to right, #8DC26F, #76b852);  /* Chrome 10-25, Safari 5.1-6 */background: linear-gradient(to right, #8DC26F, #76b852); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */">
+								<b>
+								<td>
+									Road name
+								</td>
+								<td>
+									Severity
+								</td>
+								</b>
+							</tr>
+							<tr>
+								<td>
+									<div id="road_lbl_sev"></div>
+								</td>
+								<td>
+									<script>
+											var MongoClient = require('mongodb').MongoClient;
+											var url = "mongodb://localhost:27017/twitter";
+
+											MongoClient.connect(url, function(err, db) {
+												if (err) throw err;
+													db.collection("prediction").findOne({}, function(err, result) {
+												if (err) throw err;
+													var severe = result.name;
+													document.getElementById('severity').innerHTML=severe;
+													db.close();
+											});
+											});
+									</script>
+									<b><div id="severity"></div></b>
+								</td>
+							</tr>
+						</table>
+						</td>
+					</tr>
+				</table>
+			</td>
+			<td  width="30%">
+
+			<h2>
+			Predicted Traffic</h2>
+			
+					<div id="google_map" style="width:525px;height:525px"></div>
+			</td>
+		</tr>
+	</table>
+		<br>
+	<br>
+	<br>
+	<br>
+	<br>
+<div id="map_color" style="width:300px;height:300px"></div>
+<div id="previewImage">
+<input type="submit" id="preview" />
+<a id="down" href="#">Download</a>
+
+		<script src="http://api.longdo.com/map/?key=10dc711504c21ed52209d679ec3d50da&callback=myMap"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAkhf8jtUqv3JHp9eJkIWKA9pTAAmWLRSU&callback=initMap"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

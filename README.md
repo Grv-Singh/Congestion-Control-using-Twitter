@@ -1,4 +1,5 @@
 # Minor-Project
+[![time tracker](https://wakatime.com/badge/github/Grv-Singh/Congestion-Control-using-Twitter.svg)](https://wakatime.com/badge/github/Grv-Singh/Congestion-Control-using-Twitter)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/grv97)<br>
 [![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/acad.grv97@gmail.com)<br>
 

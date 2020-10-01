@@ -1,5 +1,3 @@
-# Minor-Project
-
 ### Live Interaction [![Run on Repl.it](https://repl.it/badge/github/Grv-Singh/Congestion-Control-using-Twitter)](https://repl.it/github/Grv-Singh/Congestion-Control-using-Twitter)
 
 <a href="https://www.slideshare.net/GauravSingh1391/twitter-analysis-of-road-traffic-congestion-severity-estimation" target="_blank">Report</a>
